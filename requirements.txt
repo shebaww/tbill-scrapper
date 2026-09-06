@@ -1,3 +1,7 @@
 requests
 lxml
 beautifulsoup4
+pdfplumber
+pypdf2
+pypdf
+pandas
