@@ -5,3 +5,4 @@ pdfplumber
 pypdf2
 pypdf
 pandas
+pytest
