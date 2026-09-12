@@ -5,11 +5,12 @@ import re
 from pypdf import PdfReader
 import pandas as pd
 
-MASTER_CSV = "master_t_bills.csv"
+MASTER_CSV = "kenyan-tbills.csv"
 
 def main():
   pdf_files = [f for f in os.listdir('.') if f.lower().endswith('.pdf')]
-#  pdf_files = ["test.pdf", "rtest.pdf"]
+# For tests
+# pdf_files = ["backup/test.pdf", "backup/rtest.pdf"]
   for pdf_file in pdf_files:
     process_single_pdf(pdf_file)
   print(f"Yes bro i have completed")
@@ -24,7 +25,7 @@ def process_single_pdf(filepath):
 
     write_tocsv(table, issue_no, issue_date)
   except Exception as e:
-          print(f"  -> Error processing {pdf_path}: {e}")
+          print(f"  -> Error processing {Willfixerrorgivemeerrornamefirst}: {e}")
 
 
 def grab_issue_number(filepath):
@@ -70,23 +71,36 @@ def write_tocsv(table, issue_no, issue_date):
   if not metric_col:
     df = df.rename(columns={metric_col:"Tenor"})
     metric_col = "Tenor"
-  keywords = ["ISIN"]
   df = df.set_index(metric_col)
   df = df.T
   df = df.reset_index()
-  df.rename(columns={"index":"Tenor"}, inplace=True)
+  df = df.rename(columns={df.columns[0]: "Tenor"})
+  tenor_suffix = df["Tenor"].str.extract(r"(\d+)")[0].str.zfill(3)  
+  issue_map = {"091": issue_no[0], "182": issue_no[1], "364": issue_no[2]}
   df = df[df['Tenor'] != "TOTAL"]
   df.columns = df.iloc[0]
   df = df[1:]
-  df["Issue Number"] = issue_no
+  df = df.rename(columns={df.columns[0]: "Tenor"})
   df["Issue Date"] = issue_date
+  df["Issue Number"] = tenor_suffix.map(issue_map)
   df["Country"] = "Kenya"
   df["Currency"] = "Kshs"
+  df = df.drop(
+    columns=[
+        "Performance Rate (%)",
+        "Rollover / Redemptions",
+        "Market Weighted Average Interest\nRate",
+        "New Borrowing/Net Repayment",
+        "Of which: Competitive bids",
+        ": Non-competitive bids",
+        "Purpose / Application of Funds:",
+        "Bid-to-Cover Ratio",
+    ]
+)
   df["Issue Date"] = pd.to_datetime(df["Issue Date"], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d')
   if "Due Date" in df.columns:
         df["Due Date"] = pd.to_datetime(df["Due Date"], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d')
   df.columns = df.columns.str.replace(r'\n', ' ', regex=True).str.strip()
-  df.columns = df.columns.str.replace(r':', ' ', regex=True).str.strip()
   
   cols_to_drop = ["Purpose / Application of Funds"]
   df = df.drop(columns=[col for col in cols_to_drop if col in df.columns], errors="ignore")
@@ -97,7 +111,15 @@ def write_tocsv(table, issue_no, issue_date):
             df[col].astype(str).str.replace(r"[^\d.-]", "", regex=True),
             errors="coerce"
         )
-
+  df = df.rename(columns={
+                      df.columns[1]: "Maturity Date",
+                      df.columns[2]: "Amount Offered (Millions)",
+                      df.columns[3]: "Bids Received (Millions)",
+                      df.columns[4]: "Total Amount Accepted (Millions)",
+                      df.columns[5]: "Weighted Average Yield (Annual in %)",
+                      df.columns[6]: "Weighted Average Price (Per 100)",
+    })
+  df = df.rename(columns={df.columns[0]: "Tenor"})
   file_exists = os.path.exists(MASTER_CSV)
     
   df.to_csv(

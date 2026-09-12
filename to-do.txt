@@ -1,0 +1,12 @@
+- Combine everything into a proper project.py with a main() that runs the full pipeline end-to-end (fetch HTML → download PDFs → rename → 
+extract → output CSV)
+- Add CLI argument handling (e.g. --country, --year, --output)
+- Add proper error handling and logging
+- Write test_project.py with 3+ tests (test the regex functions, the CSV writing logic, the date parsing, etc.)
+- Write a solid README.md
+
+The scraper + PDF extraction + data cleaning pipeline, when presented as a cohesive tool with tests and docs, is a reasonable CS50P final 
+project. The subject matter (financial data) is also a nice angle.
+
+The statarb bot would have been more impressive academically, but if time is the constraint, the cleaned-up version of this is passable. 
+Don't submit it in its current state though — the commented-out code and missing tests would be an immediate flag.
