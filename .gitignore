@@ -1,4 +1,9 @@
 *.env
-*__pycache__/*
+./__pycache__/*
+./parsers/__pycache__/*
+./scrapers/__pycache__/*
+__pycache__/*
+*/__pycache__/*
 *.pyc
 *.pdf
+data/*.csv
