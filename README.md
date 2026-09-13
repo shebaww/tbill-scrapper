@@ -16,17 +16,17 @@ A Python command line tool designed to automate the collection, installation and
 
 ## Project Structure
 
-- 'data': Directory used to store finished CSV files and scrapped html files
-- 'data/kenya-pdfs': Stores all the scrapped kenya Tbill PDF files
+- 'data': Directory used to store finished CSV files and scraped html files
+- 'data/kenya-pdfs': Stores all the scraped kenya Tbill PDF files
 - 'project.py': Main Script
-- 'eth_methods': Holds majority of the classes for parsing html file
-- 'ksh_methods': Holds majority of the classes for parsing pdf file
-- 'modules.py': Holds the classes required to parse files
+- 'parsers/eth_methods': Holds majority of the classes for parsing html file
+- 'parsers/ksh_methods': Holds majority of the classes for parsing pdf file
+- 'parsers/modules.py': Holds the classes required to parse files
 - 'requirements.txt': Holds all library used
 - '\*/paths.py': Holds all the file paths needed
-- 'pdf_scrapper.py': 'Scrapes all PDF files'
-- 'web_scrapper.py': Scrapes all the HTML files necessary
-- 'tests': Directory for all unit tests
+- 'scrapers/pdf_scrapper.py': 'Scrapes all PDF files'
+- 'scrapers/web_scrapper.py': Scrapes all the HTML files necessary
+- 'test_project.py': Unit test for project.py
 
 ---
 
@@ -39,7 +39,7 @@ git clone https://github.com/shebaww/tbill-scrapper.git
 
 ```
 
-2. Create and Activate Virtual Enviroment
+2. Create and Activate Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -75,3 +75,5 @@ python project.py --kenya --years 2024
 Important Note on --years & Local Data
 
 The --years option controls which files are filtered and processed. If you have older or different year PDF files stored in your data/ directory, they may still be referenced during parsing. If you want a clean run with only specific years, clear out the data/ directory before executing your command.
+
+Notes: Some help by AI was used for adviced pandas data frame manipulation but the rest was all hand written. > 90-95% Was ME!

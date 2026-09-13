@@ -4,12 +4,12 @@ import argparse
 
 # Visual ASCII Art Banner
 BANNER = r"""
- ____                             _               _____ _     _ _ _     
-/ ___|  ___ _ __ __ _ _ __  _ __ (_)_ __   __ _  |_   _| |__ (_) | |___ 
-\___ \ / __| '__/ _` | '_ \| '_ \| | '_ \ / _` |   | | | '_ \| | | / __|
- ___) | (__| | | (_| | |_) | |_) | | | | | (_| |   | | | |_) | | | \__ \
-|____/ \___|_|  \__,_| .__/| .__/|_|_| |_|\__, |   |_| |_.__/|_|_|_|___/
-                     |_|   |_|            |___/                                                                                 
+ ____                             _               _____          _     _ _ _     
+/ ___|  ___ _ __ __ _ _ __  _ __ (_)_ __   __ _  |_   _|        | |__ (_) | |___ 
+\___ \ / __| '__/ _` | '_ \| '_ \| | '_ \ / _` |   | |  |-----| | '_ \| | | / __|
+ ___) | (__| | | (_| | |_) | |_) | | | | | (_| |   | |  |-----| | |_) | | | \__ \
+|____/ \___|_|  \__,_| .__/| .__/|_|_| |_|\__, |   |_|          |_.__/|_|_|_|___/
+                     |_|   |_|            |___/                                                                                     
   East African Treasury Bill Data Scraper & Merger
 ======================================================================
 """
@@ -27,21 +27,39 @@ def main():
   arger.add_argument("--years", nargs="+", type=int, default=[2024, 2025, 2026],
                 help="Which years to scrape/install (default: 2024 2025 2026) \n CAUTION: THIS OPTION ONLY INSTALLS FILES. IF YOU HAVE DIFFERENT YEAR PDF FILES IN 'data' THEY WILL BE USED AND PARSED. IF YOU DON'T WANT THEM USED DELETE EVERYTHING IN 'data' AND RE-INSTALL THE YEAR PDF FILES YOU ONLY WANT USED AND PARSED")
 
+  global args
   args = arger.parse_args()
-  WebScraper = web_scrapper.WebScraper()
-  PdfScraper = pdf_scrapper.PdfScraper(years=args.years)
-  Parser = modules.Parser()
+  years = args.years
   if args.run:
-    WebScraper.run()
+    run_webscraper()
   if args.ethiopia:
-    Parser.ethiopia()
+    run_ethiopia()
+  if args.kenya or args.merge:
+    run_merge(years)
   if args.kenya:
-    PdfScraper.install_pdfs()
-    Parser.kenya()
+    run_kenya(years)
   if args.merge:
+    run_merge(years)
+
+
+WebScraper = web_scrapper.WebScraper()
+Parser = modules.Parser()
+
+def run_webscraper():
+    WebScraper.run()
+
+def run_ethiopia():
+    Parser.ethiopia()
+
+def run_kenya(years):
+    PdfScraper = pdf_scrapper.PdfScraper(years=years)
+    PdfScraper.run()
+    Parser.kenya()
+
+def run_merge(years):
+    PdfScraper = pdf_scrapper.PdfScraper(years=years)
     PdfScraper.run()
     Parser.merge()
-
-
+  
 if __name__ == "__main__":
   main()
