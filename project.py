@@ -36,12 +36,10 @@ def main():
   if args.ethiopia:
     Parser.ethiopia()
   if args.kenya:
-    raise IndexError("Please Input all the years you want to scrape using '--years' option")
-  if args.years and args.kenya:
     PdfScraper.install_pdfs()
     Parser.kenya()
   if args.merge:
-    PdfScraper.install_pdfs()
+    PdfScraper.run()
     Parser.merge()
 
 
