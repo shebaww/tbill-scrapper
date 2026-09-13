@@ -76,4 +76,4 @@ Important Note on --years & Local Data
 
 The --years option controls which files are filtered and processed. If you have older or different year PDF files stored in your data/ directory, they may still be referenced during parsing. If you want a clean run with only specific years, clear out the data/ directory before executing your command.
 
-Notes: Some help by AI was used for adviced pandas data frame manipulation but the rest was all hand written. > 90-95% Was ME!
+Note on AI assistance: I used an AI assistant to help with some pandas DataFrame manipulation and debugging. The project structure, scraping logic, and parsing code are my own.
