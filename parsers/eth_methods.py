@@ -4,12 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import csv
 import sys; from pathlib import Path
-
-current_dir = Path(__file__).resolve().parent
-root = current_dir.parent
-data = root / "data"
-kenya_pdfs = data / "kenya-pdfs"
-parsers = root / "parsers"
+from parsers.path import data
 
 class EthiopianParserMethods:
     def __init__(self):

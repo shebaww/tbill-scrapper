@@ -5,13 +5,7 @@ import re
 from pypdf import PdfReader
 import pandas as pd
 import sys; from pathlib import Path
-
-current_dir = Path(__file__).resolve().parent
-root = current_dir.parent
-data = root / "data"
-kenya_pdfs = data / "kenya-pdfs"
-parsers = root / "parsers"
-
+from parsers.paths import kenya_pdfs
 
 class KenyanParserMethods:
     def __init__(self):
@@ -24,7 +18,6 @@ class KenyanParserMethods:
     def process_single_pdf(self):
         self.filepath = f"{kenya_pdfs}/{self.pdf_files[self.index]}"
         try:
-          print(f"Processing: {self.filepath}")
           table = self.grab_tables()
           issue_no = self.grab_issue_number()
           issue_date = self.grab_issue_date()
@@ -90,6 +83,7 @@ class KenyanParserMethods:
       df = df[1:]
       df = df.rename(columns={df.columns[0]: "Tenor"})
       df["Issue Date"] = issue_date
+      df["Issue Date"] = pd.to_datetime(df["Issue Date"], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d')
       df["Issue Number"] = tenor_suffix.map(issue_map)
       df["Country"] = "Kenya"
       df["Currency"] = "Kshs"
@@ -105,14 +99,10 @@ class KenyanParserMethods:
             "Bid-to-Cover Ratio",
         ]
     )
-      df["Issue Date"] = pd.to_datetime(df["Issue Date"], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d')
       if "Due Date" in df.columns:
             df["Due Date"] = pd.to_datetime(df["Due Date"], dayfirst=True, errors='coerce').dt.strftime('%Y-%m-%d')
       df.columns = df.columns.str.replace(r'\n', ' ', regex=True).str.strip()
       
-      cols_to_drop = ["Purpose / Application of Funds"]
-      df = df.drop(columns=[col for col in cols_to_drop if col in df.columns], errors="ignore")
-
       for col in df.columns:
         if col not in ["Tenor", "Due Date", "Issue Number", "Issue Date", "Country", "Currency", ""]:
             df[col] = pd.to_numeric(

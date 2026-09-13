@@ -9,31 +9,37 @@ from parsers import eth_methods
 
 class Parser():
     def __init__(self):
-        self.pdf_files = len([f for f in os.listdir(kenya_pdfs) if f.lower().endswith('.pdf')])
         self.Write = Write_tocsv()
-        # For tests
-        # self.pdf_files = ["backup/test.pdf", "backup/rtest.pdf"]
 
     def kenya(self):
+        print("Parsing Kenyan T-Bills....")
+        pdf_files = len([f for f in os.listdir(kenya_pdfs) if f.lower().endswith('.pdf')])
+        if pdf_files < 10:
+          raise FileExistsError("Please Populate More Pdf Files for kenyan tbill")
+        # For tests
+        # pdf_files = ["backup/test.pdf", "backup/rtest.pdf"]
         KPM = ksh_methods.KenyanParserMethods()
         KSH_CSV.unlink(missing_ok=True)
         print(f"Automatically Re-populating {KSH_CSV}")
-        print("==="*20)
-        for _ in range(self.pdf_files):
+        print("-"*60)
+        for i, _ in enumerate(range(pdf_files), start=1):
           df = KPM.process_single_pdf()
           self.Write.pdf(df)
-        print(f"Completed Parsing and Writing Kenyan PDF Files")
+          print(f"\rParsing [{i}/{pdf_files}]", end="", flush=True)
+        print(f"\nCompleted Parsing and Writing Kenyan PDF Files")
         
 
 
     def ethiopia(self):
+        print("Parsing Ethiopian T-Bills....")
         EPM = eth_methods.EthiopianParserMethods()
         ETH_CSV.unlink(missing_ok=True)
         print(f"Automatically Re-populating {ETH_CSV}")
-        print("==="*20)
+        print("-"*60)
         self.Write.html(EPM.scrape())
    
     def merge(self):
+        print("Merging T-Bills....")
         if not os.path.exists(KSH_CSV):
             print(f"Missing {KSH_CSV}")
             answer = input("Would you want to repopulate it?(y/N): ").strip().lower()
