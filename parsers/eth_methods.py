@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import csv
 import sys; from pathlib import Path
-from parsers.path import data
+from parsers.paths import data
 
 class EthiopianParserMethods:
     def __init__(self):
