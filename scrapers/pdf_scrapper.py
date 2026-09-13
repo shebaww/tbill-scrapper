@@ -16,6 +16,8 @@ class PdfScraper():
         self.install_pdfs()
     
     def scrape_pdf(self):
+        if not ksh_file.exists():
+          raise ValueError(f"{ksh_file} does not exist. Please scrape page '--run' then run again.")
         with open(ksh_file) as file:
             content  = file.read()
             soup = BeautifulSoup(content, "lxml")
