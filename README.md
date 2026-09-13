@@ -1,6 +1,7 @@
 # East African Treasury Bill Data Scraper
 
 A Python command line tool designed to automate the collection, installation and merging of Treasury Bill (T-Bill) data from the **Central Bank of Kenya (CBK)** and the **National Bank of Ethiopia (NBE)**
+Demo Link: https://youtu.be/GKdaQVwDZIQ
 
 ---
 
