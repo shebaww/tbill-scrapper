@@ -117,6 +117,13 @@ class EthiopianParserMethods:
              exclude_cols = ["Tenor", "Country", "Currency", "Issue Number", "Issue Date"]
              df = df.dropna(subset=[c for c in df.columns if c not in exclude_cols], how="all")
              df["Maturity Date"] = pd.to_datetime(df["Maturity Date"], format="mixed", errors="coerce").dt.strftime("%Y-%m-%d")
+             df["Total Amount Accepted (Millions)"] = pd.to_numeric(
+                  df["Total Amount Accepted (Millions)"]
+                    .astype(str)
+                    .str.replace(",", "", regex=False)
+                    .str.strip(),
+                  errors="coerce",
+              )
              df_cleaned_table.append(df)
 
            return df_cleaned_table
