@@ -4,7 +4,7 @@ import pdfplumber
 import re
 from pypdf import PdfReader
 import pandas as pd
-import sys; from pathlib import Path
+from pathlib import Path
 from parsers.paths import kenya_pdfs
 
 class KenyanParserMethods:
