@@ -2,6 +2,8 @@ from pathlib import Path
 current_dir = Path(__file__).resolve().parent
 root = current_dir.parent
 data = root / "data"
+manipulation = root / "manipulation"
+results = data / "results"
 kenya_pdfs = data / "kenya-pdfs"
 parsers = root / "parsers"
 ETH_CSV = data / "ethiopian-tbills.csv"
