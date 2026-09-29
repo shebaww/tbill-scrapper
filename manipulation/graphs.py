@@ -3,7 +3,7 @@ import matplotlib.dates as mdates
 from matplotlib.ticker import MultipleLocator
 import numpy
 from paths import data, results
-import modules
+import analysis
 import pandas as pd
 
 master = data / "master.csv"
@@ -11,7 +11,7 @@ master = data / "master.csv"
 
 class Illustrate:
     def __init__(self):
-        self.Calc = modules.Calc
+        self.Calc = analysis.Calc
         self.df = pd.read_csv(master)
         self.df["Issue Date"] = pd.to_datetime(self.df["Issue Date"], errors="coerce")
         self.df_compared = self.df.loc[self.df["Tenor"] != "28 DAYS"]
